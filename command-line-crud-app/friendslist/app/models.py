@@ -9,6 +9,7 @@ class Friend(models.Model):
     close_friend = models.BooleanField()
 
 
+# adding friends
 def add_friend(first_name, last_name, phone_number, close_friend):
     new_friend = Friend(
         first_name=first_name,
@@ -20,37 +21,34 @@ def add_friend(first_name, last_name, phone_number, close_friend):
     return new_friend
 
 
+# removing friends
 def remove_friend(first_name):
     friend_to_delete = Friend.objects.get(first_name=first_name)
     friend_to_delete.delete()
     return friend_to_delete
 
 
+# display all friends
 def show_all():
     return Friend.objects.all()
 
 
-def find_by_name(name):
+# search by full name
+def find_by_name(fname, lname):
     try:
-        return Friend.objects.filter(first_name=name)
+        return Friend.objects.get(first_name=fname, last_name=lname)
     except:
-        return Friend.objects.filter(last_name=name)
+        return None
 
 
+# show only close friends
 def show_close_friends():
     return Friend.objects.filter(close_friend=True)
 
 
+# update close status
 def change_close_status(name, status):
-    try:
-        person = Friend.object.get(first_name=name)
-        if len(person) != 0:
-            person.close_friend = status
-            person.save()
-            return person
-    except:
-        person = Friend.object.get(last_name=name)
-        if len(person) != 0:
-            person.close_friend = status
-            person.save()
-            return person
+    person = Friend.objects.get(first_name=name)
+    person.close_friend = status
+    person.save()
+    return person
